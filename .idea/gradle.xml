@@ -200,7 +200,7 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Forge/1.21.10" />
-        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="gradleJvm" value="22" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/Versions/Forge/1.21.10" />
@@ -210,7 +210,7 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Forge/1.21.11" />
-        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="gradleJvm" value="22" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/Versions/Forge/1.21.11" />
