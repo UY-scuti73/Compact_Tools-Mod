@@ -1,4 +1,0 @@
-/enchant Dev minecraft:efficiency 5
-/give Dev compacttools73:wooden_tool
-/give def minecraft:wooden_pickaxe
-/give dev minecraft:wooden_pickaxe

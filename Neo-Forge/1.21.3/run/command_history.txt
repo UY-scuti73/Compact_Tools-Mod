@@ -1,1 +1,0 @@
-/enchant Dev minecraft:efficiency 5

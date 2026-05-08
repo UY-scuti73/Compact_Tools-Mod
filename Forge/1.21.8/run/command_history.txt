@@ -1,2 +1,0 @@
-/enchant Dev minecraft:efficiency 5
-/give Dev compacttools73:diamond_tool

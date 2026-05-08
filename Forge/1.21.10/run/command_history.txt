@@ -1,2 +1,0 @@
-/enchant Dev minecraft:efficiency 5
-/enchant Dev minecraft:unbreaking 3
