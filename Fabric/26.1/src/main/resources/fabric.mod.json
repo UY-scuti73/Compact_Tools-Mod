@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "compacttools73",
+  "version": "${version}",
+  "name": "compacttools",
+  "description": "Combines All Tools Into One Item",
+  "authors": ["Bowser_The_Boss"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/compacttools73/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "xyz.quazaros.compacttools.client.CompacttoolsDataGenerator"
+    ],
+    "client": [
+      "xyz.quazaros.compacttools.client.CompacttoolsClient"
+    ],
+    "main": [
+      "xyz.quazaros.compacttools.CompactTools"
+    ]
+  },
+  "mixins": [
+    "compacttools.mixins.json",
+    {
+      "config": "compacttools.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

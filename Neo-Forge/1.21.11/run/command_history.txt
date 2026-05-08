@@ -1,0 +1,1 @@
+/give Dev compacttools73:wooden_tool
