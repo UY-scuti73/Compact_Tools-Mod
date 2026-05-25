@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.language.jvm.tasks.ProcessResources
 import org.gradle.jvm.tasks.Jar
@@ -7,6 +8,7 @@ plugins {
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.2.0'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 // --- Load all properties from ../../version.properties ---
@@ -20,8 +22,9 @@ def modId          = versionProps["mod_id"]?.toString()?.trim()
 def modAuthors     = versionProps["mod_authors"]?.toString()?.trim()
 def modGroupId     = versionProps["mod_group_id"]?.toString()?.trim()
 def modDescription = versionProps["mod_description"]?.toString()?.trim()
-// version.properties uses "mod_licence" (British spelling)
 def modLicense     = versionProps["mod_licence"]?.toString()?.trim()
+def versionControl = versionProps["version_control"]?.toString()?.trim()
+def discordLink    = versionProps["discord_link"]?.toString()?.trim()
 
 // Export them as project properties if you want to reference project.mod_*
 ext.mod_version     = modVersion
@@ -31,6 +34,8 @@ ext.mod_authors     = modAuthors
 ext.mod_group_id    = modGroupId
 ext.mod_description = modDescription
 ext.mod_license     = modLicense
+ext.version_control = versionControl
+ext.discord_link    = discordLink
 
 // --- Apply to project identity ---
 version = modVersion
@@ -103,6 +108,9 @@ dependencies {
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') {
         version { strictly '5.0.4' }
     }
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
 }
 
 // Expand properties in mods.toml and pack.mcmeta
@@ -120,6 +128,8 @@ tasks.named('processResources', ProcessResources).configure {
             mod_version             : modVersion,
             mod_authors             : modAuthors,
             mod_description         : modDescription,
+            version_control         : version_control,
+            discord_link            : discord_link
     ]
 
     inputs.properties replaceProperties
@@ -153,4 +163,7 @@ sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
     it.output.resourcesDir = dir
     it.java.destinationDirectory = dir
+}
+
+mixin {
 }
