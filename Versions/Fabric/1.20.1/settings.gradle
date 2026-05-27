@@ -1,0 +1,13 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+    }
+}
+
+Properties props = new Properties()
+file("gradle.properties").withInputStream { props.load(it) }
+rootProject.name = props.getProperty("gradle_project_name")

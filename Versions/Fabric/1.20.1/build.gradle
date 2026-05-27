@@ -1,0 +1,135 @@
+import org.gradle.api.JavaVersion
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+}
+
+// --- Load all properties from ../../version.properties ---
+def versionProps = new Properties()
+file("../../version.properties").withInputStream { versionProps.load(it) }
+
+def modVersion     = versionProps["mod_version"]?.toString()?.trim()
+def modName        = versionProps["mod_name"]?.toString()?.trim()
+def modId          = versionProps["mod_id"]?.toString()?.trim()
+def modAuthors     = versionProps["mod_authors"]?.toString()?.trim()
+def modGroupId     = versionProps["mod_group_id"]?.toString()?.trim()
+def modDescription = versionProps["mod_description"]?.toString()?.trim()
+
+def modLicense     = versionProps["mod_licence"]?.toString()?.trim()
+
+def versionControl = versionProps["version_control"]?.toString()?.trim()
+def discordLink    = versionProps["discord_link"]?.toString()?.trim()
+
+ext.mod_version     = modVersion
+ext.mod_name        = modName
+ext.mod_id          = modId
+ext.mod_authors     = modAuthors
+ext.mod_group_id    = modGroupId
+ext.mod_description = modDescription
+ext.mod_license     = modLicense
+ext.version_control = versionControl
+ext.discord_link    = discordLink
+
+version = modVersion
+group = modGroupId
+
+base {
+    archivesName = project.findProperty("archives_base_name") ?: modId
+}
+
+loom {
+    splitEnvironmentSourceSets()
+    mods {
+        "${modId}" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+fabricApi {
+    configureDataGeneration {
+        client = true
+    }
+}
+
+repositories {
+}
+
+dependencies {
+    // Fabric-specific versions still come from gradle.properties
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+// --- Resource processing / fabric.mod.json expansion ---
+processResources {
+    inputs.property "version",            project.version
+    inputs.property "minecraft_version",  project.minecraft_version
+    inputs.property "loader_version",     project.loader_version
+    inputs.property "mod_id",             project.mod_id
+    inputs.property "mod_name",           project.mod_name
+    inputs.property "mod_authors",        project.mod_authors
+    inputs.property "mod_description",    project.mod_description
+    inputs.property "mod_license",        project.mod_license
+    inputs.property "version_control",    project.version_control
+    inputs.property "discord_link",       project.discord_link
+
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand(
+                "version"           : project.version,
+                "minecraft_version" : project.minecraft_version,
+                "loader_version"    : project.loader_version,
+                "mod_id"            : project.mod_id,
+                "mod_name"          : project.mod_name,
+                "mod_authors"       : project.mod_authors,
+                "mod_description"   : project.mod_description,
+                "mod_license"       : project.mod_license,
+                "version_control"   : project.version_control,
+                "discord_link"      : project.discord_link
+        )
+    }
+}
+
+def targetJavaVersion = 17
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
+}
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
+}
+
+// configure the maven publication
+publishing {
+    publications {
+        create("mavenJava", org.gradle.api.publish.maven.MavenPublication) {
+            artifactId = project.findProperty("archives_base_name") ?: base.archivesName.get()
+            from components.java
+        }
+    }
+    repositories {
+        // publishing repos go here if you need them
+    }
+}
