@@ -2,6 +2,9 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="NeoForge-26.2" target="25" />
+      <module name="NeoForge-26.2.main" target="25" />
+      <module name="NeoForge-26.2.test" target="25" />
       <module name="xyz.quazaros.Fabric-1.21.1" target="21" />
       <module name="xyz.quazaros.Fabric-1.21.1.client" target="21" />
       <module name="xyz.quazaros.Fabric-1.21.1.main" target="21" />

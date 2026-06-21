@@ -7,6 +7,7 @@ Fabric/1.21.8
 Fabric/1.21.10
 Fabric/1.21.11
 Fabric/26.1
+Fabric/26.2
 Forge/1.20.1
 Forge/1.21.1
 Forge/1.21.3
@@ -23,3 +24,4 @@ Neo-Forge/1.21.8
 Neo-Forge/1.21.10
 Neo-Forge/1.21.11
 Neo-Forge/26.1
+Neo-Forge/26.2
